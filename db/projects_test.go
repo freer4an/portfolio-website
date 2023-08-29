@@ -39,6 +39,23 @@ func TestGetProject(t *testing.T) {
 	require.Equal(t, res1.Url, res2.Url)
 }
 
+func TestGetAllProjects(t *testing.T) {
+	for i := 0; i < 10; i++ {
+		arg := randomProject()
+		res, err := testStore.CreateProject(ctx, arg)
+		require.NoError(t, err)
+		assert.NotZero(t, res.ID, "ID shouldn't be zero value")
+	}
+
+	res1, err := testStore.GetAllProjects(ctx, 5, 1)
+	require.NoError(t, err)
+	require.Len(t, res1, 5, "length of result should be 5")
+
+	res2, err := testStore.GetAllProjects(ctx, 5, 2)
+	require.NoError(t, err)
+	require.Len(t, res2, 5, "length of result should be 5")
+}
+
 func TestDeleteProject(t *testing.T) {
 	arg := randomProject()
 
@@ -65,17 +82,31 @@ func TestUpdateProject(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotZero(t, res1.ID, "ID shouldn't be zero value")
 
-	arg2 := updateProject{
-		Name:        "Updated Name",
-		Description: "Updated Description",
-		IsFinished:  false,
+	arg2 := UpdateProject{
+		{
+			Key:   "name",
+			Value: "New Name",
+		},
+		{
+			Key:   "description",
+			Value: "New Description",
+		},
+		{
+			Key:   "url",
+			Value: "New Url",
+		},
+		{
+			Key:   "finished",
+			Value: false,
+		},
 	}
 
 	res2, err := testStore.UpdateProject(ctx, res1.ID, arg2)
 	require.NoError(t, err)
 	assert.NotZero(t, res2.ID, "ID shouldn't be zero value")
-	require.Equal(t, arg2.Name, res2.Name)
-	require.Equal(t, arg2.Description, res2.Description)
+	require.Equal(t, arg2[0].Value, res2.Name)
+	require.Equal(t, arg2[1].Value, res2.Description)
+	require.Equal(t, arg2[2].Value, res2.Url)
 	require.False(t, res2.IsFinished, "updated to false")
 
 }

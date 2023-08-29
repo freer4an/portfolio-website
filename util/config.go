@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	DBname   string `mapstructure:"DB_NAME"`
+	CollName string `mapstructure:"COLL_NAME"`
 	DBuri    string `mapstructure:"DB_URI"`
 	DBuser   string `mapstructure:"DB_USER"`
 	HttpAddr string `mapstructure:"HTTP_ADDR"`

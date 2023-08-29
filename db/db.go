@@ -2,15 +2,13 @@ package db
 
 import "go.mongodb.org/mongo-driver/mongo"
 
-const (
-	projects = "projects"
-)
-
 type Store struct {
-	db *mongo.Database
+	db         *mongo.Database
+	collection *mongo.Collection
 }
 
-func NewStore(client *mongo.Client, dbName string) *Store {
+func NewStore(client *mongo.Client, dbName, collName string) *Store {
 	db := client.Database(dbName)
-	return &Store{db: db}
+	coll := db.Collection(collName)
+	return &Store{db: db, collection: coll}
 }

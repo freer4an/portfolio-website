@@ -25,7 +25,7 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	testStore = NewStore(client, cfg.DBname)
+	testStore = NewStore(client, cfg.DBname, "tests")
 	os.Exit(m.Run())
 
 }
