@@ -74,8 +74,8 @@ func TestUpdateProject(t *testing.T) {
 	res2, err := testStore.UpdateProject(ctx, res1.ID, arg2)
 	require.NoError(t, err)
 	assert.NotZero(t, res2.ID, "ID shouldn't be zero value")
-	require.NotEqual(t, res1.Name, res2.Name)
-	require.NotEqual(t, res1.Description, res2.Description)
+	require.Equal(t, arg2.Name, res2.Name)
+	require.Equal(t, arg2.Description, res2.Description)
 	require.False(t, res2.IsFinished, "updated to false")
 
 }
