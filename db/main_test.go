@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var db mongo.Database
 var testStore *Store
 
 func TestMain(m *testing.M) {
@@ -27,5 +26,10 @@ func TestMain(m *testing.M) {
 	}
 	testStore = NewStore(client, cfg.DBname, "tests")
 	os.Exit(m.Run())
+
+	err = client.Disconnect(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
 
 }

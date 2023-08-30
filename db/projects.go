@@ -32,11 +32,7 @@ func (store *Store) GetProject(ctx context.Context, id primitive.ObjectID) (Proj
 	return result, err
 }
 
-type Pagination struct {
-	Page, Limit uint
-}
-
-func (store *Store) GetAllProjects(ctx context.Context, limit, page int) ([]Project, error) {
+func (store *Store) GetAllProjects(ctx context.Context, limit, page uint) ([]Project, error) {
 	var result []Project
 	l := int64(limit)
 	skip := int64(page*limit - limit)
