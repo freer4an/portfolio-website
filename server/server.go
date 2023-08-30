@@ -27,7 +27,7 @@ func NewServer(ctx context.Context, config util.Config, store *db.Store) *Server
 func (s *Server) initRoutes() {
 	r := chi.NewRouter()
 	r.Get("/", s.Welcome)
-	r.Get("/projects/{page}", s.GetProjects)
+	r.Get("/projects/{page}", s.Projects)
 	// r_admin := r.Route("/project/{id}", func(r chi.Router) {
 	// 	r.Patch("/", s.UpdateProject)
 	// 	r.Delete("/", s.DeleteProject)

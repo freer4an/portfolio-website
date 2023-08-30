@@ -21,11 +21,8 @@ func main() {
 	config := util.InitConfig(".")
 
 	ctx := context.Background()
-
 	client := runMongo(ctx, config)
-
 	store := db.NewStore(client, config.DBname, config.CollName)
-
 	server := server.NewServer(ctx, config, store)
 
 	go func() {

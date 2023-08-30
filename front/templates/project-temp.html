@@ -1,0 +1,12 @@
+{{define "project"}}
+<hr>
+<div class="project">
+    <div class="project_id">{{.ID}}</div>
+    <div class="project_name"><h1>{{.Name}}</h1></div>
+    <div class="project_description"><h2>{{.Description}}</h2></div>
+    <div class="project_url"><a href="">{{.Url}}</a></div>
+    {{if .IsFinished}}
+    <h3>finshed</h3>
+    {{end}}
+</div>
+{{end}}
