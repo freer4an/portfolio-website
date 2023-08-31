@@ -8,34 +8,28 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (store *Store) CreateProject(ctx context.Context, project Project) (Project, error) {
+func (store *Store) CreateProject(ctx context.Context, project Project) (interface{}, error) {
 	res, err := store.collection.InsertOne(ctx, project)
 	if err != nil {
-		return Project{}, err
+		return nil, err
 	}
-
-	id, ok := res.InsertedID.(primitive.ObjectID)
-	if ok {
-		project.ID = id
-	}
-
-	return project, nil
+	return res.InsertedID, nil
 }
 
-func (store *Store) GetProject(ctx context.Context, id primitive.ObjectID) (Project, error) {
+func (store *Store) GetProject(ctx context.Context, name string) (Project, error) {
 	var result Project
-	filter := bson.M{"_id": id}
+	filter := bson.M{"name": name}
 	err := store.collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return Project{}, err
 	}
-	return result, err
+	return result, nil
 }
 
-func (store *Store) GetAllProjects(ctx context.Context, limit, page uint) ([]Project, error) {
+func (store *Store) GetAllProjects(ctx context.Context, limit, page int64) ([]Project, error) {
 	var result []Project
-	l := int64(limit)
-	skip := int64(page*limit - limit)
+	l := limit
+	skip := page*limit - limit
 	fOpt := options.FindOptions{Limit: &l, Skip: &skip}
 	filter := bson.D{}
 
@@ -52,21 +46,31 @@ func (store *Store) GetAllProjects(ctx context.Context, limit, page uint) ([]Pro
 	return result, err
 }
 
-func (store *Store) DeleteProject(ctx context.Context, id primitive.ObjectID) error {
-	filter := bson.M{"_id": id}
+func (store *Store) DeleteProject(ctx context.Context, name string) error {
+	filter := bson.M{"name": name}
 	_, err := store.collection.DeleteOne(ctx, filter)
 	return err
 }
 
-type UpdateProject bson.D
-
-func (store *Store) UpdateProject(ctx context.Context, id primitive.ObjectID, arg UpdateProject) (Project, error) {
+func (store *Store) UpdateProject(ctx context.Context, name string, arg primitive.D) (interface{}, error) {
+	filter := bson.M{"name": name}
 	update := bson.D{
-		{"$set", arg},
+		{Key: "$set", Value: arg},
 	}
-	_, err := store.collection.UpdateByID(ctx, id, update)
+	res, err := store.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return nil, err
+	}
+
+	return res.UpsertedID, nil
+}
+
+func (store *Store) GetProjectByID(ctx context.Context, id primitive.ObjectID) (Project, error) {
+	var result Project
+	filter := bson.M{"_id": id}
+	err := store.collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return Project{}, err
 	}
-	return store.GetProject(ctx, id)
+	return result, nil
 }

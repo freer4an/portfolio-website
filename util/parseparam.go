@@ -9,12 +9,10 @@ var (
 	ErrParam = errors.New("invalid param")
 )
 
-func UrlParamToInt(paramStr string) (uint, error) {
+func UrlParamToInt(paramStr string) (int64, error) {
 	param, err := strconv.Atoi(paramStr)
-
 	if err != nil || param < 1 {
 		return 0, ErrParam
 	}
-
-	return uint(param), err
+	return int64(param), nil
 }

@@ -20,8 +20,6 @@ func (server *Server) Welcome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) Projects(w http.ResponseWriter, r *http.Request) {
-	temp = template.Must(template.ParseGlob("./front/templates/*.html"))
-
 	pageParam := chi.URLParam(r, "page")
 	page, err := util.UrlParamToInt(pageParam)
 	if err != nil {
@@ -40,4 +38,8 @@ func (server *Server) Projects(w http.ResponseWriter, r *http.Request) {
 		errResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+}
+
+func init() {
+	temp = template.Must(template.ParseGlob("./front/templates/*.html"))
 }

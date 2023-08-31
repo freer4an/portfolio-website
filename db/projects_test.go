@@ -7,6 +7,8 @@ import (
 	"github.com/freer4an/portfolio-website/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var ctx context.Context
@@ -16,11 +18,8 @@ func TestInsertProject(t *testing.T) {
 
 	res, err := testStore.CreateProject(ctx, arg)
 	require.NoError(t, err)
-	require.NotZero(t, res.Name, "must be not empty")
-	require.NotZero(t, res.Description)
-	require.NotZero(t, res.Url)
-	require.True(t, res.IsFinished, "Should be true")
-	assert.NotZero(t, res.ID, "ID shouldn't be zero value")
+	_, ok := res.(primitive.ObjectID)
+	require.True(t, ok)
 }
 
 func TestGetProject(t *testing.T) {
@@ -28,23 +27,21 @@ func TestGetProject(t *testing.T) {
 
 	res1, err := testStore.CreateProject(ctx, arg)
 	require.NoError(t, err)
-	assert.NotZero(t, res1.ID, "ID shouldn't be zero value")
+	assert.NotNil(t, res1, "ID shouldn't be zero value")
 
-	res2, err := testStore.GetProject(ctx, res1.ID)
+	res2, err := testStore.GetProject(ctx, arg.Name)
 	require.NoError(t, err)
 
-	require.Equal(t, res1.ID, res2.ID)
-	require.Equal(t, res1.Name, res2.Name)
-	require.Equal(t, res1.Description, res2.Description)
-	require.Equal(t, res1.Url, res2.Url)
+	require.NotZero(t, res2.Name)
+	require.NotZero(t, res2.Description)
+	require.NotZero(t, res2.Url)
 }
 
 func TestGetAllProjects(t *testing.T) {
 	for i := 0; i < 10; i++ {
 		arg := randomProject()
-		res, err := testStore.CreateProject(ctx, arg)
+		_, err := testStore.CreateProject(ctx, arg)
 		require.NoError(t, err)
-		assert.NotZero(t, res.ID, "ID shouldn't be zero value")
 	}
 
 	res1, err := testStore.GetAllProjects(ctx, 5, 1)
@@ -59,33 +56,29 @@ func TestGetAllProjects(t *testing.T) {
 func TestDeleteProject(t *testing.T) {
 	arg := randomProject()
 
-	res1, err := testStore.CreateProject(ctx, arg)
-	require.NoError(t, err)
-	assert.NotZero(t, res1.ID, "ID shouldn't be zero value")
-
-	res2, err := testStore.GetProject(ctx, res1.ID)
-	require.NoError(t, err)
-	require.Equal(t, res1.ID, res2.ID)
-
-	err = testStore.DeleteProject(ctx, res2.ID)
+	_, err := testStore.CreateProject(ctx, arg)
 	require.NoError(t, err)
 
-	res2, err = testStore.GetProject(ctx, res1.ID)
+	_, err = testStore.GetProject(ctx, arg.Name)
+	require.NoError(t, err)
+
+	err = testStore.DeleteProject(ctx, arg.Name)
+	require.NoError(t, err)
+
+	_, err = testStore.GetProject(ctx, arg.Name)
 	require.Error(t, err)
-	assert.Zero(t, res2.ID, "deleted ID should be zero value")
 }
 
 func TestUpdateProject(t *testing.T) {
 	arg := randomProject()
 
-	res1, err := testStore.CreateProject(ctx, arg)
+	_, err := testStore.CreateProject(ctx, arg)
 	require.NoError(t, err)
-	assert.NotZero(t, res1.ID, "ID shouldn't be zero value")
-
-	arg2 := UpdateProject{
+	new_name := util.RandomStr(6)
+	arg2 := bson.D{
 		{
 			Key:   "name",
-			Value: "New Name",
+			Value: new_name,
 		},
 		{
 			Key:   "description",
@@ -101,13 +94,21 @@ func TestUpdateProject(t *testing.T) {
 		},
 	}
 
-	res2, err := testStore.UpdateProject(ctx, res1.ID, arg2)
+	_, err = testStore.UpdateProject(ctx, arg.Name, arg2)
 	require.NoError(t, err)
-	assert.NotZero(t, res2.ID, "ID shouldn't be zero value")
-	require.Equal(t, arg2[0].Value, res2.Name)
-	require.Equal(t, arg2[1].Value, res2.Description)
-	require.Equal(t, arg2[2].Value, res2.Url)
-	require.False(t, res2.IsFinished, "updated to false")
+
+	res, err := testStore.GetProject(ctx, new_name)
+	require.NoError(t, err)
+
+	require.Equal(t, arg2[0].Value, res.Name)
+	require.Equal(t, arg2[1].Value, res.Description)
+	require.Equal(t, arg2[2].Value, res.Url)
+
+	require.NotZero(t, res.Name)
+	require.NotZero(t, res.Description)
+	require.NotZero(t, res.Url)
+
+	require.False(t, res.IsFinished, "updated to false")
 
 }
 
