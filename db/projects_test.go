@@ -62,8 +62,9 @@ func TestDeleteProject(t *testing.T) {
 	_, err = testStore.GetProject(ctx, arg.Name)
 	require.NoError(t, err)
 
-	err = testStore.DeleteProject(ctx, arg.Name)
+	count, err := testStore.DeleteProject(ctx, arg.Name)
 	require.NoError(t, err)
+	require.Equal(t, count, int64(1))
 
 	_, err = testStore.GetProject(ctx, arg.Name)
 	require.Error(t, err)

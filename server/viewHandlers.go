@@ -10,7 +10,7 @@ import (
 
 var temp *template.Template
 
-func (server *Server) Welcome(w http.ResponseWriter, r *http.Request) {
+func (server *Server) welcome(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./front/templates/welcome.html")
 	if err != nil {
 		errResponse(w, err, http.StatusBadRequest)
@@ -19,7 +19,7 @@ func (server *Server) Welcome(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
-func (server *Server) Projects(w http.ResponseWriter, r *http.Request) {
+func (server *Server) projects(w http.ResponseWriter, r *http.Request) {
 	pageParam := chi.URLParam(r, "page")
 	page, err := util.UrlParamToInt(pageParam)
 	if err != nil {

@@ -36,7 +36,7 @@ func main() {
 	}()
 
 	sig := make(chan os.Signal, 1)
-	signal.Notify(sig, os.Interrupt, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+	signal.Notify(sig, os.Interrupt, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGTSTP)
 	<-sig
 
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
@@ -72,7 +72,7 @@ func runMongo(ctx context.Context, config util.Config) *mongo.Client {
 
 func mongoMigrate(ctx context.Context, config util.Config, client *mongo.Client) error {
 	indexModel := mongo.IndexModel{
-		Keys:    bson.D{{Key: "Name", Value: -1}},
+		Keys:    bson.D{{Key: "name", Value: 1}},
 		Options: options.Index().SetUnique(true),
 	}
 	db := client.Database(config.DBname)

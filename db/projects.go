@@ -46,13 +46,16 @@ func (store *Store) GetAllProjects(ctx context.Context, limit, page int64) ([]Pr
 	return result, err
 }
 
-func (store *Store) DeleteProject(ctx context.Context, name string) error {
+func (store *Store) DeleteProject(ctx context.Context, name string) (int64, error) {
 	filter := bson.M{"name": name}
-	_, err := store.collection.DeleteOne(ctx, filter)
-	return err
+	res, err := store.collection.DeleteOne(ctx, filter)
+	if err != nil {
+		return 0, err
+	}
+	return res.DeletedCount, err
 }
 
-func (store *Store) UpdateProject(ctx context.Context, name string, arg primitive.D) (interface{}, error) {
+func (store *Store) UpdateProject(ctx context.Context, name string, arg interface{}) (interface{}, error) {
 	filter := bson.M{"name": name}
 	update := bson.D{
 		{Key: "$set", Value: arg},
