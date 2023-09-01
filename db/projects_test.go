@@ -5,29 +5,28 @@ import (
 	"testing"
 
 	"github.com/freer4an/portfolio-website/util"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var ctx context.Context
 
-func TestInsertProject(t *testing.T) {
+func createRandomProject(t *testing.T) Project {
 	arg := randomProject()
 
 	res, err := testStore.CreateProject(ctx, arg)
 	require.NoError(t, err)
-	_, ok := res.(primitive.ObjectID)
-	require.True(t, ok)
+	_, err = testStore.CreateProject(ctx, arg)
+	require.Error(t, err)
+	arg.ID = res
+	return arg
+}
+func TestInsertProject(t *testing.T) {
+	createRandomProject(t)
 }
 
 func TestGetProject(t *testing.T) {
-	arg := randomProject()
-
-	res1, err := testStore.CreateProject(ctx, arg)
-	require.NoError(t, err)
-	assert.NotNil(t, res1, "ID shouldn't be zero value")
+	arg := createRandomProject(t)
 
 	res2, err := testStore.GetProject(ctx, arg.Name)
 	require.NoError(t, err)
@@ -39,9 +38,7 @@ func TestGetProject(t *testing.T) {
 
 func TestGetAllProjects(t *testing.T) {
 	for i := 0; i < 10; i++ {
-		arg := randomProject()
-		_, err := testStore.CreateProject(ctx, arg)
-		require.NoError(t, err)
+		createRandomProject(t)
 	}
 
 	res1, err := testStore.GetAllProjects(ctx, 5, 1)
@@ -54,13 +51,7 @@ func TestGetAllProjects(t *testing.T) {
 }
 
 func TestDeleteProject(t *testing.T) {
-	arg := randomProject()
-
-	_, err := testStore.CreateProject(ctx, arg)
-	require.NoError(t, err)
-
-	_, err = testStore.GetProject(ctx, arg.Name)
-	require.NoError(t, err)
+	arg := createRandomProject(t)
 
 	count, err := testStore.DeleteProject(ctx, arg.Name)
 	require.NoError(t, err)
@@ -71,10 +62,8 @@ func TestDeleteProject(t *testing.T) {
 }
 
 func TestUpdateProject(t *testing.T) {
-	arg := randomProject()
+	arg := createRandomProject(t)
 
-	_, err := testStore.CreateProject(ctx, arg)
-	require.NoError(t, err)
 	new_name := util.RandomStr(6)
 	arg2 := bson.D{
 		{
@@ -95,7 +84,7 @@ func TestUpdateProject(t *testing.T) {
 		},
 	}
 
-	_, err = testStore.UpdateProject(ctx, arg.Name, arg2)
+	_, err := testStore.UpdateProject(ctx, arg.Name, arg2)
 	require.NoError(t, err)
 
 	res, err := testStore.GetProject(ctx, new_name)

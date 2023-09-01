@@ -8,12 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (store *Store) CreateProject(ctx context.Context, project Project) (interface{}, error) {
+func (store *Store) CreateProject(ctx context.Context, project Project) (primitive.ObjectID, error) {
 	res, err := store.collection.InsertOne(ctx, project)
 	if err != nil {
-		return nil, err
+		return primitive.ObjectID{}, err
 	}
-	return res.InsertedID, nil
+	return res.InsertedID.(primitive.ObjectID), nil
 }
 
 func (store *Store) GetProject(ctx context.Context, name string) (Project, error) {
@@ -68,12 +68,12 @@ func (store *Store) UpdateProject(ctx context.Context, name string, arg interfac
 	return res.UpsertedID, nil
 }
 
-func (store *Store) GetProjectByID(ctx context.Context, id primitive.ObjectID) (Project, error) {
-	var result Project
-	filter := bson.M{"_id": id}
-	err := store.collection.FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		return Project{}, err
-	}
-	return result, nil
-}
+// func (store *Store) GetProjectByID(ctx context.Context, id primitive.ObjectID) (Project, error) {
+// 	var result Project
+// 	filter := bson.M{"_id": id}
+// 	err := store.collection.FindOne(ctx, filter).Decode(&result)
+// 	if err != nil {
+// 		return Project{}, err
+// 	}
+// 	return result, nil
+// }
