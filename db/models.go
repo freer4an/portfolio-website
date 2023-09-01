@@ -10,6 +10,7 @@ type Tag struct {
 type Project struct {
 	ID          primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	Name        string             `bson:"name,omitempty" json:"name"`
+	Abstract    string             `bson:"abstract" json:"abstract"`
 	Description string             `bson:"description,omitempty" json:"description"`
 	Url         string             `bson:"url,omitempty" json:"url"`
 	Tags        []Tag              `bson:"tags,omitempty" json:"tags"`

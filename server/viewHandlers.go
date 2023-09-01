@@ -5,22 +5,20 @@ import (
 	"text/template"
 
 	"github.com/freer4an/portfolio-website/util"
-	"github.com/go-chi/chi/v5"
 )
 
 var temp *template.Template
 
 func (server *Server) welcome(w http.ResponseWriter, r *http.Request) {
-	t, err := template.ParseFiles("./front/templates/welcome.html")
+	err := temp.ExecuteTemplate(w, "welcome.html", nil)
 	if err != nil {
-		errResponse(w, err, http.StatusBadRequest)
+		errResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	t.Execute(w, nil)
 }
 
 func (server *Server) projects(w http.ResponseWriter, r *http.Request) {
-	pageParam := chi.URLParam(r, "page")
+	pageParam := r.URL.Query().Get("page")
 	page, err := util.UrlParamToInt(pageParam)
 	if err != nil {
 		errResponse(w, err, http.StatusBadRequest)
