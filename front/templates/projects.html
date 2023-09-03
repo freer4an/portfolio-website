@@ -6,11 +6,13 @@
     <title>Projects</title>
 </head>
 <body>
-    {{template "navbar"}}
+    {{template "header"}}
     <div class="projects_container">
         {{range .}}
             {{template "project" .}}
         {{end}}
     </div>
+    {{template "footer"}}
+    {{template "static"}}
 </body>
 </html>
