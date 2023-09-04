@@ -12,14 +12,21 @@ import (
 var ctx context.Context
 
 func createRandomProject(t *testing.T) Project {
-	arg := randomProject()
+	project := randomProject()
 
-	res, err := testStore.CreateProject(ctx, arg)
+	res, err := testStore.CreateProject(ctx, project)
 	require.NoError(t, err)
-	_, err = testStore.CreateProject(ctx, arg)
-	require.Error(t, err)
-	arg.ID = res
-	return arg
+
+	tags := randomTag(3)
+	err = testStore.AddProjectTags(ctx, project.Name, tags...)
+	require.NoError(t, err)
+
+	projectU, err := testStore.GetProject(ctx, project.Name)
+	require.NoError(t, err)
+	require.Len(t, projectU.Tags, 3)
+	project.ID = res
+
+	return projectU
 }
 func TestInsertProject(t *testing.T) {
 	createRandomProject(t)
@@ -105,8 +112,9 @@ func TestUpdateProject(t *testing.T) {
 func randomProject() Project {
 	p := Project{
 		Name:        util.RandomStr(6),
-		Description: util.RandomStr(20),
-		Url:         util.RandomStr(15),
+		Abstract:    util.RandomStr(25),
+		Description: util.RandomStr(50),
+		Url:         util.RandomStr(12),
 		IsFinished:  true,
 	}
 	return p

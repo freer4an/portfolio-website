@@ -8,22 +8,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func randomProjectWithTags(t *testing.T) Project {
-	project := createRandomProject(t)
-	tags := randomTag(3)
-	err := testStore.AddProjectTags(ctx, project.Name, tags...)
-	require.NoError(t, err)
-	projectU, err := testStore.GetProject(ctx, project.Name)
-	require.NoError(t, err)
-	require.Len(t, projectU.Tags, 3)
-	return projectU
-}
 func TestAddProjectTags(t *testing.T) {
-	randomProjectWithTags(t)
+	createRandomProject(t)
 }
 
 func TestDeleteProjectTags(t *testing.T) {
-	project := randomProjectWithTags(t)
+	project := createRandomProject(t)
 	deleteTags := []string{project.Tags[0].TagName, project.Tags[1].TagName}
 	err := testStore.DeleteProjectTags(ctx, project.Name, deleteTags...)
 	require.NoError(t, err)
