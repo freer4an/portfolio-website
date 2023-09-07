@@ -1,13 +1,16 @@
 {{define "project"}}
-<hr>
-<div class="project">
-    <h3 class="project-name">{{.Name}}</h3>
-    <p class="project-abstract">A brief abstract about the project.</p>
-    <div class="project-description"><h2>{{.Description}}</h2></div>
-    <div class="project-url"><a href="{{.Url}}">link</a></div>
-    <p class="project-tags">{{range .Tags}}{{end}}</p>
-    {{if .IsFinished}}
-    <h3>finshed</h3>
-    {{end}}
+<div class="card portfolioContent">
+    <div class="card-body">
+        <h4 class="card-title">{{.Name}}</h4>
+        <p class="card-text">{{.Description}}</p>
+        <ul class="card-tagbox">
+            {{range .Tags}}
+            <li class="{{.TagType}}">{{.TagName}}</li>
+            {{end}}
+        </ul>
+        <div class="text-center">
+            <a href="{{.Url}}" class="btn btn-success">Link</a>
+        </div>
+    </div>
 </div>
 {{end}}

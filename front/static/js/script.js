@@ -1,16 +1,18 @@
-const navbar = document.querySelector(".navbar")
+const header = document.querySelector('.navbar');
+console.log(header)
+window.onscroll = function() {
+    const top = window.scrollY;
+    if(top >=100) {
+        header.classList.add('navbarDark');
+    }
+    else {
+        header.classList.remove('navbarDark');
+    }
+}
+// collapse navbar after click on small devices
+const navLinks = document.querySelectorAll('.nav-item')
+const menuToggle = document.getElementById('navbarSupportedContent')
 
-const projectsLink = navbar.querySelector('.nav-projects');
-
-projectsLink.addEventListener('click', event => {
-    event.preventDefault();
-    
-    const currentPage = 1;
-    const queryParams = {page: currentPage};
-    const url = new URL(projectsLink.href);
-    Object.keys(queryParams).forEach(key => {
-        url.searchParams.append(key, queryParams[key]);
-    });
-
-    window.location.href = url.href;
-});
+navLinks.forEach((l) => {
+    l.addEventListener('click', () => { new bootstrap.Collapse(menuToggle).toggle() })
+})
