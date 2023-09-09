@@ -35,7 +35,7 @@ func (server *Server) projects(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	projects, err := server.store.GetAllProjects(server.ctx, 6, page)
+	projects, err := server.store.GetAllProjects(server.ctx, 4, page)
 	if err != nil {
 		errResponse(w, err, http.StatusInternalServerError)
 		return

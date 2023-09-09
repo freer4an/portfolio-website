@@ -1,10 +1,12 @@
 package db
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Tag struct {
 	TagName string `bson:"tag_name" json:"tag_name"`
-	TagType string `bson:"tag_type" json:"tag_type"`
+	TagType string `bson:"tag_type" json:"tag_type" validate:"required"`
 }
 
 type Project struct {

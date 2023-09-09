@@ -26,6 +26,7 @@ func NewServer(ctx context.Context, config util.Config, store *db.Store) *Server
 
 func (s *Server) initRoutes() {
 	r := chi.NewRouter()
+	// r.Use(middleware.RequestLogger())
 	r.Get("/", s.welcome)
 	r.Get("/projects", s.projects)
 	r.Get("/project/{name}", s.getProjectByName)
