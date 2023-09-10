@@ -12,6 +12,7 @@ type Config struct {
 	DBuri    string `mapstructure:"DB_URI"`
 	DBuser   string `mapstructure:"DB_USER"`
 	HttpAddr string `mapstructure:"HTTP_ADDR"`
+	Env      string `mapstructure:"Env"`
 }
 
 func InitConfig(path string) (config Config) {

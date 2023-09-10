@@ -26,17 +26,14 @@ func NewServer(ctx context.Context, config util.Config, store *db.Store) *Server
 
 func (s *Server) initRoutes() {
 	r := chi.NewRouter()
-	// r.Use(middleware.RequestLogger())
+	r.Use(s.logger)
 	r.Get("/", s.welcome)
+	r.Get("/admin", s.admin)
 	r.Get("/projects", s.projects)
 	r.Get("/project/{name}", s.getProjectByName)
 	r.Delete("/project/{name}", s.deleteProject)
 	r.Patch("/project/{name}", s.updateProject)
 	r.Post("/add-project", s.addProject)
-	// r_admin := r.Route("/project/{id}", func(r chi.Router) {
-	// 	r.Patch("/", s.UpdateProject)
-	// 	r.Delete("/", s.DeleteProject)
-	// })
 	fs := http.FileServer(http.Dir("./front/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 	s.router = r
