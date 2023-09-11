@@ -16,9 +16,11 @@ type Config struct {
 }
 
 func InitConfig(path string) (config Config) {
+	viper.AddConfigPath(path)
 	viper.SetConfigName("app")
 	viper.SetConfigType("env")
-	viper.AddConfigPath(path)
+
+	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal().Err(err)

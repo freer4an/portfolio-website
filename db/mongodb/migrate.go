@@ -10,7 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// make migrations and add unique index to filed 'name'
+// make migrations and add unique index to db 'projects' field 'name'
 func MongoMigrate(ctx context.Context, config util.Config, client *mongo.Client) error {
 	indexModel := mongo.IndexModel{
 		Keys:    bson.D{{Key: "name", Value: 1}},
