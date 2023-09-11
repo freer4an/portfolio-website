@@ -28,12 +28,19 @@ func (s *Server) initRoutes() {
 	r := chi.NewRouter()
 	r.Use(s.logger)
 	r.Get("/", s.welcome)
-	r.Get("/admin", s.admin)
-	r.Get("/projects", s.projects)
-	r.Get("/project/{name}", s.getProjectByName)
-	r.Delete("/project/{name}", s.deleteProject)
-	r.Patch("/project/{name}", s.updateProject)
-	r.Post("/add-project", s.addProject)
+	r.Route("/admin", func(r chi.Router) {
+		r.Get("/", s.addProject)
+		r.Post("/login", s.addProject)
+		r.Post("/projects", s.addProject)
+		r.Delete("/projects/{name}", s.deleteProject)
+		r.Patch("/projects/{name}", s.updateProject)
+	})
+
+	r.Route("/projects", func(r chi.Router) {
+		r.Get("/", s.projects)
+		r.Get("/{name}", s.getProjectByName)
+	})
+
 	fs := http.FileServer(http.Dir("./front/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 	s.router = r

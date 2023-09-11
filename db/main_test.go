@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/freer4an/portfolio-website/util"
 	"go.mongodb.org/mongo-driver/bson"
@@ -36,10 +35,8 @@ func TestMain(m *testing.M) {
 		log.Fatal(err)
 	}
 
-	os.Exit(m.Run())
-
-	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel()
+	exit := m.Run()
+	defer os.Exit(exit)
 
 	err = testStore.collection.Drop(ctx)
 	if err != nil {
