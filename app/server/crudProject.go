@@ -11,9 +11,8 @@ import (
 )
 
 func (server *Server) addProject(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
 	var project db.Project
-	if err := decoder.Decode(&project); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return
 	}
@@ -26,6 +25,7 @@ func (server *Server) addProject(w http.ResponseWriter, r *http.Request) {
 		errResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (server *Server) getProjectByName(w http.ResponseWriter, r *http.Request) {
@@ -46,14 +46,14 @@ func (server *Server) getProjectByName(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) updateProject(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
 	var project interface{}
-	if err := decoder.Decode(&project); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return
 	}
 
 	name := chi.URLParam(r, "name")
+
 	_, err := server.store.UpdateProject(server.ctx, name, project)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
@@ -63,6 +63,7 @@ func (server *Server) updateProject(w http.ResponseWriter, r *http.Request) {
 		errResponse(w, err, http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (server *Server) deleteProject(w http.ResponseWriter, r *http.Request) {

@@ -7,9 +7,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/freer4an/portfolio-website/app/server"
 	"github.com/freer4an/portfolio-website/db"
 	"github.com/freer4an/portfolio-website/db/mongodb"
-	"github.com/freer4an/portfolio-website/server"
 	"github.com/freer4an/portfolio-website/util"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

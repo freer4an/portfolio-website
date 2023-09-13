@@ -23,7 +23,7 @@ func (w *ResponseRecorder) Write(body []byte) (int, error) {
 	return w.ResponseWriter.Write(body)
 }
 
-func (server *Server) logger(next http.Handler) http.Handler {
+func logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		t1 := time.Now()
 
@@ -46,6 +46,5 @@ func (server *Server) logger(next http.Handler) http.Handler {
 			Str("status_text", http.StatusText(writer.StatusCode)).
 			Dur("duration", duration).
 			Msg("HTTP request")
-
 	})
 }

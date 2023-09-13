@@ -26,18 +26,21 @@ func NewServer(ctx context.Context, config util.Config, store *db.Store) *Server
 
 func (s *Server) initRoutes() {
 	r := chi.NewRouter()
-	r.Use(s.logger)
-	r.Get("/", s.welcome)
+	r.Use(logger)
+
+	// admin routes
 	r.Route("/admin", func(r chi.Router) {
-		r.Get("/", s.addProject)
-		r.Post("/login", s.addProject)
+		r.Get("/", s.admin)
+		r.Post("/login", s.admin_login)
 		r.Post("/projects", s.addProject)
 		r.Delete("/projects/{name}", s.deleteProject)
 		r.Patch("/projects/{name}", s.updateProject)
 	})
 
-	r.Route("/projects", func(r chi.Router) {
-		r.Get("/", s.projects)
+	// public routes
+	r.Route("/", func(r chi.Router) {
+		r.Get("/", s.welcome)
+		r.Get("/projects", s.projects)
 		r.Get("/{name}", s.getProjectByName)
 	})
 

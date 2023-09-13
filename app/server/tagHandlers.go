@@ -12,8 +12,7 @@ func (server *Server) addProjectTags(w http.ResponseWriter, r *http.Request) {
 	project_name := chi.URLParam(r, "name")
 
 	tags := []db.Tag{}
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&tags); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&tags); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return
 	}
@@ -30,8 +29,7 @@ func (server *Server) deleteProjectTags(w http.ResponseWriter, r *http.Request) 
 	project_name := chi.URLParam(r, "name")
 
 	tags := []string{}
-	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&tags); err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&tags); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return
 	}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin panel</title>
+</head>
+<body>
+    <button class="add-project-btn">+</button>
+
+    <div id="add-project" class="hidden">
+        <h2>New Project</h2>
+        <form class="addProjectForm" action="/admin/projects" method="POST">
+            <label for="name">Name</label>
+            <input type="text" name="name" class="inputUsername" required>
+            <label for="abstract">Abstract</label>
+            <input type="abstract" name="abstract">
+            <label for="description">Description</label>
+            <input type="description" name="description">
+            <label for="Url">Url</label>
+            <input type="Url" name="Url">
+            <button class="addProjectBtn" value="Add project">Submit</button>
+        </form>
+    </div>
+
+    {{range .}}
+    <div class="project-container">
+        <h4 class="project-title" id="project-title">{{.Name}}</h4>
+        <h6 class="project-abstract" id="project-abstract">{{.Abstract}}</h6>
+        <p class="project-description" id="project-description">{{.Description}}</p>
+        <a href="{{.Url}}" class="project-link" id="project-link">Link</a>
+        <ul class="project-tagbox">
+            {{range .Tags}}
+            <li class="{{.TagType}}">{{.TagName}}</li>
+            {{end}}
+        </ul>
+        <button id="updateBtn"></button>    
+        <button onclick="deleteProject(`{{.Name}}`)">Delete</button>
+    </div>    
+    {{end}}
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>
