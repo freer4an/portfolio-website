@@ -64,7 +64,6 @@ func (store *Store) UpdateProject(ctx context.Context, name string, arg interfac
 	if err != nil {
 		return nil, err
 	}
-
 	return res.UpsertedID, nil
 }
 

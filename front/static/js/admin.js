@@ -3,31 +3,14 @@ const GET = "GET"
 const PATCH = "PATCH"
 const DELETE = "DELETE"
 
-
-let addProjectBtn = document.getElementById("addProjectBtn")
-
-// new project
-addProjectBtn.addEventListener("click", () =>{
-    let name = document.getElementById("project-name").value;
-    let title = document.getElementById("project-title").value;
-    let abstract = document.getElementById("project-abstract").value;
-    let description = document.getElementById("project-description").value;
-    let link = document.getElementById("project-link").value;
-    const url = "/projects"
-    
-    const body = {
-        abstract: abstract,
-        title: title,
-        description: description,
-        link: link,
-    };
-
-    deleteNullFileds(body)
-    console.log(body)
-    // todo: remove stop
-    stop
-    submitProject(body, url, POST)
-})
+function toggleVisibility() {
+    var x = document.getElementById("containerFormProject");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
 
 function submitProject(body, url, method) {
     fetch(url, {
@@ -36,8 +19,7 @@ function submitProject(body, url, method) {
         headers: {
             "Content-Type": "application/json"
         }
-    })
-    .then(response => {
+    }).then(response => {
         if (response.ok) {
             window.location.reload()
             console.log("Succesfully submited")
@@ -45,8 +27,7 @@ function submitProject(body, url, method) {
             alert("Failed")
             console.error("Failed to submit");
         }
-    })
-    .catch(error => {
+    }).catch(error => {
         console.error(error);
     });
 }
@@ -55,8 +36,7 @@ function deleteProject(name) {
     const url = "admin/projects/" + name
     fetch(url, {
         method: DELETE,
-    })
-    .then(response => {
+    }).then(response => {
         if (response.ok) {
             window.location.reload()
             console.log("Succesfully deleted")
@@ -64,6 +44,8 @@ function deleteProject(name) {
             alert("Failed")
             console.error("Failed to delete");
         }
+    }).catch(error => {
+        console.error(error);
     });
 }
 

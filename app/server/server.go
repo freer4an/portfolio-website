@@ -13,7 +13,7 @@ import (
 type Server struct {
 	config util.Config
 	router *chi.Mux
-	store  *db.Store
+	store  db.Repository
 	ctx    context.Context
 	http   *http.Server
 }
@@ -29,9 +29,10 @@ func (s *Server) initRoutes() {
 	r.Use(logger)
 
 	// admin routes
-	r.Route("/admin", func(r chi.Router) {
-		r.Get("/", s.admin)
-		r.Post("/login", s.admin_login)
+	r.Group(func(r chi.Router) {
+		r.Use(s.Admin)
+		r.Get("/admin", s.admin)
+		r.Post("/admin/login", s.admin_login)
 		r.Post("/projects", s.addProject)
 		r.Delete("/projects/{name}", s.deleteProject)
 		r.Patch("/projects/{name}", s.updateProject)
@@ -41,7 +42,7 @@ func (s *Server) initRoutes() {
 	r.Route("/", func(r chi.Router) {
 		r.Get("/", s.welcome)
 		r.Get("/projects", s.projects)
-		r.Get("/{name}", s.getProjectByName)
+		r.Get("/projects/{name}", s.getProjectByName)
 	})
 
 	fs := http.FileServer(http.Dir("./front/static"))

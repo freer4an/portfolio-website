@@ -3,12 +3,17 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"net/http"
 
 	"github.com/google/uuid"
 )
 
-const secret = "slmdasdmad;ladl;afnlka"
+const (
+	secret = "slmdasdmad;ladl;afnlka"
+)
+
+var admin_temp *template.Template
 
 func (server *Server) admin(w http.ResponseWriter, r *http.Request) {
 	projects, err := server.store.GetAllProjects(server.ctx, 10, 1)
@@ -16,7 +21,10 @@ func (server *Server) admin(w http.ResponseWriter, r *http.Request) {
 		errResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	temp.ExecuteTemplate(w, "admin.html", projects)
+	if err = admin_temp.Execute(w, projects); err != nil {
+		errResponse(w, err, http.StatusInternalServerError)
+		return
+	}
 }
 
 type loginRequest struct {
@@ -71,4 +79,8 @@ func deleteAdminCookie(w http.ResponseWriter) {
 	for k := range session {
 		delete(session, k)
 	}
+}
+
+func init() {
+	admin_temp = template.Must(template.ParseFiles("./front/templates/admin/admin.html"))
 }
