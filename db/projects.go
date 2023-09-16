@@ -3,12 +3,13 @@ package db
 import (
 	"context"
 
+	"github.com/freer4an/portfolio-website/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (store *Store) CreateProject(ctx context.Context, project Project) (primitive.ObjectID, error) {
+func (store *Store) CreateProject(ctx context.Context, project models.Project) (primitive.ObjectID, error) {
 	res, err := store.collection.InsertOne(ctx, project)
 	if err != nil {
 		return primitive.ObjectID{}, err
@@ -16,18 +17,18 @@ func (store *Store) CreateProject(ctx context.Context, project Project) (primiti
 	return res.InsertedID.(primitive.ObjectID), nil
 }
 
-func (store *Store) GetProject(ctx context.Context, name string) (Project, error) {
-	var result Project
+func (store *Store) GetProject(ctx context.Context, name string) (models.Project, error) {
+	var result models.Project
 	filter := bson.M{"name": name}
 	err := store.collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
-		return Project{}, err
+		return models.Project{}, err
 	}
 	return result, nil
 }
 
-func (store *Store) GetAllProjects(ctx context.Context, limit, page int64) ([]Project, error) {
-	var result []Project
+func (store *Store) GetAllProjects(ctx context.Context, limit, page int64) ([]models.Project, error) {
+	var result []models.Project
 	l := limit
 	skip := page*limit - limit
 	fOpt := options.FindOptions{Limit: &l, Skip: &skip}
@@ -67,12 +68,12 @@ func (store *Store) UpdateProject(ctx context.Context, name string, arg interfac
 	return res.UpsertedID, nil
 }
 
-// func (store *Store) GetProjectByID(ctx context.Context, id primitive.ObjectID) (Project, error) {
-// 	var result Project
+// func (store *Store) GetProjectByID(ctx context.Context, id primitive.ObjectID) (models.Project, error) {
+// 	var result models.Project
 // 	filter := bson.M{"_id": id}
 // 	err := store.collection.FindOne(ctx, filter).Decode(&result)
 // 	if err != nil {
-// 		return Project{}, err
+// 		return models.Project{}, err
 // 	}
 // 	return result, nil
 // }

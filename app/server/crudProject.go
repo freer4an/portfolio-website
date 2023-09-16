@@ -5,13 +5,13 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/freer4an/portfolio-website/db"
+	"github.com/freer4an/portfolio-website/models"
 	"github.com/go-chi/chi/v5"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func (server *Server) addProject(w http.ResponseWriter, r *http.Request) {
-	var project db.Project
+	var project models.Project
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return

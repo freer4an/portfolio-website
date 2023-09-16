@@ -4,14 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/freer4an/portfolio-website/db"
+	"github.com/freer4an/portfolio-website/models"
 	"github.com/go-chi/chi/v5"
 )
 
 func (server *Server) addProjectTags(w http.ResponseWriter, r *http.Request) {
 	project_name := chi.URLParam(r, "name")
 
-	tags := []db.Tag{}
+	tags := []models.Tag{}
 	if err := json.NewDecoder(r.Body).Decode(&tags); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return

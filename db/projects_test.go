@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/freer4an/portfolio-website/models"
 	"github.com/freer4an/portfolio-website/util"
 	"github.com/stretchr/testify/require"
 	"go.mongodb.org/mongo-driver/bson"
@@ -11,7 +12,7 @@ import (
 
 var ctx context.Context
 
-func createRandomProject(t *testing.T) Project {
+func createRandomProject(t *testing.T) models.Project {
 	project := randomProject()
 
 	res, err := testStore.CreateProject(ctx, project)
@@ -109,8 +110,8 @@ func TestUpdateProject(t *testing.T) {
 
 }
 
-func randomProject() Project {
-	p := Project{
+func randomProject() models.Project {
+	p := models.Project{
 		Name:        util.RandomStr(6),
 		Abstract:    util.RandomStr(25),
 		Description: util.RandomStr(50),

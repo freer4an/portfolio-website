@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"testing"
 
+	"github.com/freer4an/portfolio-website/models"
 	"github.com/freer4an/portfolio-website/util"
 	"github.com/stretchr/testify/require"
 )
@@ -22,11 +23,11 @@ func TestDeleteProjectTags(t *testing.T) {
 	require.Len(t, project.Tags, 1)
 }
 
-func randomTag(n int) []Tag {
+func randomTag(n int) []models.Tag {
 	tags_types := [5]string{"technology", "language", "framework", "security", "service"}
-	tags := []Tag{}
+	tags := []models.Tag{}
 	for i := 0; i < n; i++ {
-		tag := Tag{
+		tag := models.Tag{
 			TagName: util.RandomStr(4),
 			TagType: tags_types[rand.Intn(4)],
 		}
