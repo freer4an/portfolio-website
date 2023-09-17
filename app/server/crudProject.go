@@ -46,15 +46,17 @@ func (server *Server) getProjectByName(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) updateProject(w http.ResponseWriter, r *http.Request) {
-	var project interface{}
-	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
+	var req interface{}
+	// todo
+	// project, ok := req.(db.Project)
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		errResponse(w, err, http.StatusBadRequest)
 		return
 	}
 
 	name := chi.URLParam(r, "name")
 
-	_, err := server.store.UpdateProject(server.ctx, name, project)
+	_, err := server.store.UpdateProject(server.ctx, name, req)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			errResponse(w, err, http.StatusNotFound)
