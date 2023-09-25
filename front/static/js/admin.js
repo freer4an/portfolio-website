@@ -3,6 +3,7 @@ const GET = "GET"
 const PATCH = "PATCH"
 const DELETE = "DELETE"
 
+// visibility of project form
 function toggleVisibility() {
     var x = document.getElementById("containerFormProject");
     if (x.style.display === "none") {
@@ -30,7 +31,7 @@ function submitProject(body, url, method) {
     }).catch(error => {
         console.error(error);
     });
-}
+};
 
 function deleteProject(name) {
     const url = "admin/projects/" + name

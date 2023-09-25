@@ -8,7 +8,7 @@ newProjectForm.addEventListener("submit", () =>{
     let abstract = document.getElementById("inputAbstract").value;
     let description = document.getElementById("inputDescription").value;
     let link = document.getElementById("inputLink").value;
-    const url = "/admin/projects"
+    const url = "/admin/projects";
     
     const body = {
         name: name,
@@ -17,7 +17,7 @@ newProjectForm.addEventListener("submit", () =>{
         link: link,
     };
     submitProject(body, url, POST)
-})
+});
 
 // update project
 // updateProjectForm.addEventListener("submit", () =>{
