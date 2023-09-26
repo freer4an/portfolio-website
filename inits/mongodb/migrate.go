@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/freer4an/portfolio-website/util"
 	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -12,13 +11,13 @@ import (
 )
 
 // make migrations and add unique index to db 'projects' field 'name'
-func MongoMigrate(ctx context.Context, config *util.Config, client *mongo.Client) error {
+func MongoMigrate(client *mongo.Client, db_name, collection string) error {
 	indexModel := mongo.IndexModel{
 		Keys:    bson.D{{Key: "name", Value: 1}},
 		Options: options.Index().SetUnique(true),
 	}
-	db := client.Database(config.DBname)
-	coll := db.Collection(config.CollName)
+	db := client.Database(db_name)
+	coll := db.Collection(collection)
 	name, err := coll.Indexes().CreateOne(context.TODO(), indexModel)
 	if err != nil {
 		return fmt.Errorf("Failed to create index: %v", err)

@@ -5,18 +5,18 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/freer4an/portfolio-website/util"
+	"github.com/freer4an/portfolio-website/inits/config"
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
 )
 
 type Server struct {
-	config *util.Config
+	config *config.Config
 	router *chi.Mux
 	http   *http.Server
 }
 
-func NewServer(config *util.Config) *Server {
+func NewServer(config *config.Config) *Server {
 	server := &Server{config: config}
 	return server
 }

@@ -4,17 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/freer4an/portfolio-website/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // connect and get mongo client
-func MongoClient(ctx context.Context, config *util.Config) (*mongo.Client, error) {
-	if config.DBuri == "" {
+func Connect(ctx context.Context, uri string) (*mongo.Client, error) {
+	if uri == "" {
 		return nil, fmt.Errorf("Empty mongodb uri")
 	}
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(config.DBuri))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		return nil, fmt.Errorf("failed connection to MongoDB: %v", err)
 	}

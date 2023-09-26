@@ -10,6 +10,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+type ProjectI interface {
+	Create(ctx context.Context, project models.Project) (primitive.ObjectID, error)
+	GetByName(ctx context.Context, name string) (models.Project, error)
+	GetAll(ctx context.Context, limit, page int64) ([]models.Project, error)
+	Delete(ctx context.Context, name string) (int64, error)
+	Update(ctx context.Context, name string, arg interface{}) (interface{}, error)
+	GetByID(ctx context.Context, id primitive.ObjectID) (models.Project, error)
+}
+
 type ProjectsR struct {
 	db         *mongo.Database
 	collection *mongo.Collection
@@ -81,12 +90,12 @@ func (repo *ProjectsR) Update(ctx context.Context, name string, arg interface{})
 	return res.UpsertedID, nil
 }
 
-// func (repo *ProjectsR) GetByID(ctx context.Context, id primitive.ObjectID) (models.Project, error) {
-// 	var result models.Project
-// 	filter := bson.M{"_id": id}
-// 	err := repo.collection.FindOne(ctx, filter).Decode(&result)
-// 	if err != nil {
-// 		return models.Project{}, err
-// 	}
-// 	return result, nil
-// }
+func (repo *ProjectsR) GetByID(ctx context.Context, id primitive.ObjectID) (models.Project, error) {
+	var result models.Project
+	filter := bson.M{"_id": id}
+	err := repo.collection.FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		return models.Project{}, err
+	}
+	return result, nil
+}

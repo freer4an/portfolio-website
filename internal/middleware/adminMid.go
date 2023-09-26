@@ -1,4 +1,4 @@
-package admin
+package middleware
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 
 var admin_c = "admin"
 
-func MiddlewareAdmin(next http.Handler) http.Handler {
+func Admin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie(admin_c)
 		if err != nil {

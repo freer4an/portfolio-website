@@ -2,19 +2,15 @@ cookie:
   admin: admin
   maxage:
   duration:
-portfolio:
-  http-addr: 0.0.0.0:8000
+app:
+  addr: 0.0.0.0:8000
 admin:
-  http-addr: 0.0.0.0:8001
-  password: oqmozesx
-  name: ady
+  password: secret
+  login: ady
 db:
   name: portfolio
   uri: mongodb://localhost:27017
   user: root
   password: password
-  collection:
-    projects: projects
-    tests: tests
-env:
-  mode: development
+  coll-projects: projects
+env: development

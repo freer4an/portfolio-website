@@ -8,6 +8,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+type TagI interface {
+	AddToProject(ctx context.Context, project_name string, tags ...models.Tag) error
+	DeleteFromProject(ctx context.Context, project_name string, tags ...string) error
+}
+
 type TagsR struct {
 	db         *mongo.Database
 	collection *mongo.Collection

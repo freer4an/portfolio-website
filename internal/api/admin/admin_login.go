@@ -8,6 +8,7 @@ import (
 	"github.com/freer4an/portfolio-website/helpers"
 	"github.com/freer4an/portfolio-website/internal/repository"
 	"github.com/google/uuid"
+	"github.com/spf13/viper"
 )
 
 type loginRequest struct {
@@ -23,7 +24,7 @@ func (api *AdminAPI) Login_action(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Username != api.config.AdminName || req.Password != api.config.AdminPass {
+	if req.Username != viper.GetString("") || req.Password != viper.GetString("") {
 		helpers.ErrResponse(w, fmt.Errorf("Failed to confirm data"), http.StatusUnauthorized)
 		return
 	}

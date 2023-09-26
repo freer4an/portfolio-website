@@ -1,19 +1,17 @@
 package admin
 
 import (
-	"github.com/freer4an/portfolio-website/helpers"
+	"github.com/freer4an/portfolio-website/internal/middleware"
 	"github.com/freer4an/portfolio-website/internal/repository"
-	"github.com/freer4an/portfolio-website/util"
 	"github.com/go-chi/chi/v5"
 )
 
 type AdminAPI struct {
-	config *util.Config
-	store  *repository.Repository
+	store *repository.Repository
 }
 
-func New(config *util.Config, store *repository.Repository) *AdminAPI {
-	return &AdminAPI{config: config, store: store}
+func New(store *repository.Repository) *AdminAPI {
+	return &AdminAPI{store: store}
 }
 
 // admin routes
@@ -24,7 +22,7 @@ func (api *AdminAPI) Routes() chi.Router {
 		r.Post("/", api.Login_action)
 	})
 	r.Group(func(r chi.Router) {
-		r.Use(helpers.MiddlewareAdmin)
+		r.Use(middleware.Admin)
 		r.Get("/", api.Admin)
 		r.Route("/projects", func(r chi.Router) {
 			r.Post("/", api.AddProject)
