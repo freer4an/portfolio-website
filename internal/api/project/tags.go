@@ -1,7 +1,6 @@
-package admin
+package project
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 
@@ -10,7 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func (api *AdminAPI) addProjectTags(w http.ResponseWriter, r *http.Request) {
+func (api *ProjectAPI) addProjectTags(w http.ResponseWriter, r *http.Request) {
 	project_name := chi.URLParam(r, "name")
 
 	tags := []models.Tag{}
@@ -19,7 +18,7 @@ func (api *AdminAPI) addProjectTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := api.store.Tag.AddToProject(context.TODO(), project_name, tags...)
+	err := api.store.Tag.AddToProject(r.Context(), project_name, tags...)
 	if err != nil {
 		helpers.ErrResponse(w, err, http.StatusInternalServerError)
 		return
@@ -27,7 +26,7 @@ func (api *AdminAPI) addProjectTags(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (api *AdminAPI) deleteProjectTags(w http.ResponseWriter, r *http.Request) {
+func (api *ProjectAPI) deleteProjectTags(w http.ResponseWriter, r *http.Request) {
 	project_name := chi.URLParam(r, "name")
 
 	tags := []string{}
@@ -36,7 +35,7 @@ func (api *AdminAPI) deleteProjectTags(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := api.store.Tag.DeleteFromProject(context.TODO(), project_name, tags...)
+	err := api.store.Tag.DeleteFromProject(r.Context(), project_name, tags...)
 	if err != nil {
 		helpers.ErrResponse(w, err, http.StatusInternalServerError)
 		return

@@ -1,4 +1,4 @@
-package admin
+package client
 
 import (
 	"encoding/json"
@@ -16,7 +16,7 @@ type loginRequest struct {
 	Password string `json:"password"`
 }
 
-func (api *AdminAPI) Login_action(w http.ResponseWriter, r *http.Request) {
+func (api *ClientAPI) Login_action(w http.ResponseWriter, r *http.Request) {
 	var req loginRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -41,12 +41,12 @@ func (api *AdminAPI) Login_action(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helpers.SetAdminCookie(w, "admin", uuid.String())
+	helpers.SetCookie(w, uuid.String())
 	w.WriteHeader(http.StatusOK)
 }
 
-func (api *AdminAPI) Admin_login(w http.ResponseWriter, r *http.Request) {
-	err := temp.ExecuteTemplate(w, "login.html", nil)
+func (api *ClientAPI) Admin_login(w http.ResponseWriter, r *http.Request) {
+	err := api.temp.ExecuteTemplate(w, "login.html", nil)
 	if err != nil {
 		helpers.ErrResponse(w, err, http.StatusInternalServerError)
 		return
@@ -54,6 +54,6 @@ func (api *AdminAPI) Admin_login(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func (api *AdminAPI) Admin_logout(w http.ResponseWriter, r *http.Request) {
-	helpers.DeleteAdminCookie(w)
+func (api *ClientAPI) Admin_logout(w http.ResponseWriter, r *http.Request) {
+	helpers.DeleteCookie(w)
 }

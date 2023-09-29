@@ -39,6 +39,6 @@ func Admin(next http.Handler) http.Handler {
 }
 
 func deleteSession(w http.ResponseWriter, name string) {
-	helpers.DeleteAdminCookie(w)
+	helpers.DeleteCookie(w)
 	repository.DeleteSession(name)
 }

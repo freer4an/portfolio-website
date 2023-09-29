@@ -1,27 +1,33 @@
 package client
 
 import (
+	"html/template"
 	"net/http"
 
+	"github.com/freer4an/portfolio-website/internal/middleware"
 	"github.com/freer4an/portfolio-website/internal/repository"
 	"github.com/go-chi/chi/v5"
 )
 
-type ProjectAPI struct {
+type ClientAPI struct {
 	store *repository.Repository
+	temp  *template.Template
 }
 
-func New(store *repository.Repository) *ProjectAPI {
-	return &ProjectAPI{store: store}
+func New(store *repository.Repository, temp *template.Template) *ClientAPI {
+	return &ClientAPI{store: store, temp: temp}
 }
 
-// project routes
-func (api *ProjectAPI) Routes() chi.Router {
+func (api *ClientAPI) Routes() chi.Router {
 	r := chi.NewRouter()
-	r.Route("/", func(r chi.Router) {
-		r.Get("/", api.Welcome)
-		r.Get("/projects", api.Projects)
-		r.Get("/projects/{name}", api.GetProjectByName)
+	r.Get("/", api.Welcome)
+	r.Route("/login", func(r chi.Router) {
+		r.Get("/", api.Admin_login)
+		r.Post("/", api.Login_action)
+	})
+	r.Group(func(r chi.Router) {
+		r.Use(middleware.Admin)
+		r.Get("/admin", api.Admin)
 	})
 	fs := http.FileServer(http.Dir("./front/static"))
 	r.Handle("/static/*", http.StripPrefix("/static/", fs))

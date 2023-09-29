@@ -1,4 +1,4 @@
-package admin
+package project
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (api *AdminAPI) AddProject(w http.ResponseWriter, r *http.Request) {
+func (api *ProjectAPI) AddProject(w http.ResponseWriter, r *http.Request) {
 	var project models.Project
 	if err := json.NewDecoder(r.Body).Decode(&project); err != nil {
 		helpers.ErrResponse(w, err, http.StatusBadRequest)
@@ -31,7 +31,7 @@ func (api *AdminAPI) AddProject(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (api *AdminAPI) GetProjectByName(w http.ResponseWriter, r *http.Request) {
+func (api *ProjectAPI) GetProjectByName(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	project, err := api.store.Project.GetByName(context.TODO(), name)
 	if err != nil {
@@ -42,13 +42,17 @@ func (api *AdminAPI) GetProjectByName(w http.ResponseWriter, r *http.Request) {
 		helpers.ErrResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	if err := temp.Execute(w, project); err != nil {
+	// if err := json.NewEncoder(w).Encode(&project); err != nil {
+	// 	helpers.ErrResponse(w, err, http.StatusInternalServerError)
+	// 	return
+	// }
+	if err := api.temp.ExecuteTemplate(w, "project.html", project); err != nil {
 		helpers.ErrResponse(w, err, http.StatusInternalServerError)
 		return
 	}
 }
 
-func (api *AdminAPI) UpdateProject(w http.ResponseWriter, r *http.Request) {
+func (api *ProjectAPI) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	var req interface{}
 	if _, ok := req.(models.Project); !ok {
 		helpers.ErrResponse(w, fmt.Errorf("Type assertion error"), http.StatusBadRequest)
@@ -73,7 +77,7 @@ func (api *AdminAPI) UpdateProject(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (api *AdminAPI) DeleteProject(w http.ResponseWriter, r *http.Request) {
+func (api *ProjectAPI) DeleteProject(w http.ResponseWriter, r *http.Request) {
 	name := chi.URLParam(r, "name")
 	count, err := api.store.Project.Delete(context.TODO(), name)
 	if err != nil {

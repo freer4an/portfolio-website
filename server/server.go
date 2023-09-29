@@ -5,30 +5,25 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/freer4an/portfolio-website/inits/config"
 	"github.com/go-chi/chi/v5"
 	"github.com/rs/zerolog/log"
 )
 
 type Server struct {
-	config *config.Config
 	router *chi.Mux
 	http   *http.Server
 }
 
-func NewServer(config *config.Config) *Server {
-	server := &Server{config: config}
+func New() *Server {
+	server := &Server{}
+	server.init_router()
 	return server
-}
-
-func (s *Server) InitRoutes(r *chi.Mux) {
-	s.router = r
 }
 
 func (server *Server) Start(addr string) error {
 	switch {
 	case server.router == nil:
-		err := errors.New("undefined router instance")
+		err := errors.New("nil router")
 		return err
 	case addr == "":
 		err := errors.New("empty addres")

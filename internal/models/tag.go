@@ -3,7 +3,7 @@ package models
 import "github.com/go-playground/validator/v10"
 
 type Tag struct {
-	TagName string `bson:"tag_name" json:"tag_name"`
+	TagName string `bson:"tag_name" json:"tag_name" validate:"required"`
 	TagType string `bson:"tag_type" json:"tag_type" validate:"required,tag_oneof"`
 }
 

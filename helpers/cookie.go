@@ -2,18 +2,18 @@ package helpers
 
 import "net/http"
 
-func SetAdminCookie(w http.ResponseWriter, name, uuid string) {
+func SetCookie(w http.ResponseWriter, uuid string) {
 	c := &http.Cookie{
 		Name:     "admin",
 		Value:    uuid,
 		Secure:   true,
 		HttpOnly: true,
-		Path:     "/admin",
+		Path:     "/",
 	}
 	http.SetCookie(w, c)
 }
 
-func DeleteAdminCookie(w http.ResponseWriter) {
+func DeleteCookie(w http.ResponseWriter) {
 	c := &http.Cookie{
 		Name:     "admin",
 		Value:    "",
