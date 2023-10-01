@@ -106,7 +106,7 @@ func TestUpdateProject(t *testing.T) {
 	require.NotZero(t, res.Description)
 	require.NotZero(t, res.Url)
 
-	require.False(t, res.IsFinished, "updated to false")
+	require.False(t, res.Finished, "updated to false")
 
 }
 
@@ -116,7 +116,7 @@ func randomProject() models.Project {
 		Abstract:    util.RandomStr(25),
 		Description: util.RandomStr(50),
 		Url:         util.RandomStr(12),
-		IsFinished:  true,
+		Finished:    true,
 	}
 	return p
 }

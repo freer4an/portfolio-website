@@ -11,5 +11,5 @@ type Project struct {
 	Description string             `bson:"description,omitempty" json:"description"`
 	Url         string             `bson:"url,omitempty" json:"link" validate:"url"`
 	Tags        []Tag              `bson:"tags,omitempty" json:"tags"`
-	IsFinished  bool               `bson:"finished,omitempty" json:"finished" validate:"boolean"`
+	Finished    bool               `bson:"finished,omitempty" json:"finished" validate:"boolean"`
 }

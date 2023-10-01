@@ -41,7 +41,7 @@ func run() error {
 		config.Database.Name,
 		config.Database.CollProject)
 
-	api := api.New(store, temp)
+	api := api.New(store, temp, config)
 	server := server.New()
 	server.BuildRoutes("/projects", api.Project.Routes())
 	server.BuildRoutes("/", api.Client.Routes())

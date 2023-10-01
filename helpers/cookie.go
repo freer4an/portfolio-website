@@ -2,10 +2,10 @@ package helpers
 
 import "net/http"
 
-func SetCookie(w http.ResponseWriter, uuid string) {
+func SetCookie(w http.ResponseWriter, name, value string) {
 	c := &http.Cookie{
-		Name:     "admin",
-		Value:    uuid,
+		Name:     name,
+		Value:    value,
 		Secure:   true,
 		HttpOnly: true,
 		Path:     "/",
@@ -13,9 +13,9 @@ func SetCookie(w http.ResponseWriter, uuid string) {
 	http.SetCookie(w, c)
 }
 
-func DeleteCookie(w http.ResponseWriter) {
+func DeleteCookie(w http.ResponseWriter, name string) {
 	c := &http.Cookie{
-		Name:     "admin",
+		Name:     name,
 		Value:    "",
 		Path:     "/",
 		MaxAge:   -1,

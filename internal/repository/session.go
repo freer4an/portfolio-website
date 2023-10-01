@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 )
@@ -10,19 +10,15 @@ var (
 	Sessions = make(map[string]uuid.UUID)
 )
 
-func AddSession(name string, uuid uuid.UUID) error {
-	if _, ok := Sessions[name]; ok {
-		return errors.New("session already exists")
-	}
+func AddSession(name string, uuid uuid.UUID) {
 	Sessions[name] = uuid
-	return nil
 }
 
-func GetSessionStr(name string) string {
+func GetSessionStr(name string) (string, error) {
 	if session, ok := Sessions[name]; ok {
-		return session.String()
+		return session.String(), nil
 	}
-	return ""
+	return "", fmt.Errorf("Session not found")
 }
 
 func DeleteSession(name string) {

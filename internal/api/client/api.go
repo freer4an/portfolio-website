@@ -4,18 +4,20 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/freer4an/portfolio-website/inits/config"
 	"github.com/freer4an/portfolio-website/internal/middleware"
 	"github.com/freer4an/portfolio-website/internal/repository"
 	"github.com/go-chi/chi/v5"
 )
 
 type ClientAPI struct {
-	store *repository.Repository
-	temp  *template.Template
+	store  *repository.Repository
+	temp   *template.Template
+	config *config.Config
 }
 
-func New(store *repository.Repository, temp *template.Template) *ClientAPI {
-	return &ClientAPI{store: store, temp: temp}
+func New(store *repository.Repository, temp *template.Template, config *config.Config) *ClientAPI {
+	return &ClientAPI{store: store, temp: temp, config: config}
 }
 
 func (api *ClientAPI) Routes() chi.Router {

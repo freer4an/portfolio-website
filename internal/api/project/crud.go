@@ -22,13 +22,13 @@ func (api *ProjectAPI) AddProject(w http.ResponseWriter, r *http.Request) {
 	_, err := api.store.Project.Create(context.TODO(), project)
 	if err != nil {
 		if mongo.IsDuplicateKeyError(err) {
-			helpers.ErrResponse(w, err, http.StatusForbidden)
+			helpers.ErrResponse(w, fmt.Errorf(`Project with name "%s" already exists`, project.Name), http.StatusNotAcceptable)
 			return
 		}
 		helpers.ErrResponse(w, err, http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 }
 
 func (api *ProjectAPI) GetProjectByName(w http.ResponseWriter, r *http.Request) {

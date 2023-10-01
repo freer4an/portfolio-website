@@ -18,9 +18,9 @@ func Connect(ctx context.Context, uri string) (*mongo.Client, error) {
 		return nil, fmt.Errorf("failed connection to MongoDB: %v", err)
 	}
 
-	if err = client.Ping(ctx, nil); err != nil {
-		return nil, fmt.Errorf("Empty mongodb uri: %v", err)
-	}
+	// if err = client.Ping(ctx, nil); err != nil {
+	// 	return nil, fmt.Errorf(": %v", err)
+	// }
 
 	return client, nil
 }

@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -20,25 +21,30 @@ func Admin(next http.Handler) http.Handler {
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
-			deleteSession(w, admin_c)
+			deleteSession(w)
 			helpers.ErrResponse(w, err, http.StatusForbidden)
 			return
 		}
 
-		token := repository.GetSessionStr(admin_c)
-
-		if token != cookie.Value {
-			deleteSession(w, admin_c)
-			w.WriteHeader(http.StatusUnauthorized)
+		token, err := repository.GetSessionStr(admin_c)
+		if err != nil {
+			helpers.ErrResponse(w, err, http.StatusUnauthorized)
 			return
 		}
+
+		if token != cookie.Value {
+			deleteSession(w)
+			helpers.ErrResponse(w, fmt.Errorf("invalid cookie"), http.StatusUnauthorized)
+			return
+		}
+
 		ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
 		defer cancel()
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-func deleteSession(w http.ResponseWriter, name string) {
-	helpers.DeleteCookie(w)
-	repository.DeleteSession(name)
+func deleteSession(w http.ResponseWriter) {
+	helpers.DeleteCookie(w, admin_c)
+	repository.DeleteSession(admin_c)
 }

@@ -3,14 +3,14 @@ package server
 import (
 	"net/http"
 
-	"github.com/freer4an/portfolio-website/util"
+	"github.com/freer4an/portfolio-website/internal/middleware"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 )
 
 func (s *Server) init_router() {
 	r := chi.NewRouter()
-	r.Use(util.Logger)
+	r.Use(middleware.Logger)
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"http://", "https://"},
 		AllowedMethods:   []string{"GET", "POST", "PATCH", "DELETE", "OPTIONS"},

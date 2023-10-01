@@ -1,4 +1,4 @@
-package util
+package middleware
 
 import (
 	"net/http"
@@ -36,7 +36,7 @@ func Logger(next http.Handler) http.Handler {
 		duration := time.Since(t1)
 
 		logger := log.Info()
-		if writer.StatusCode != http.StatusOK {
+		if writer.StatusCode > 300 || writer.StatusCode < 200 {
 			logger = log.Error().Bytes("body", writer.Body)
 		}
 

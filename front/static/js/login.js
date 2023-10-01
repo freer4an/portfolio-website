@@ -1,17 +1,15 @@
 const loginForm = document.getElementById('login-form');
 
 // new project
-loginForm.addEventListener("submit", () => {
+function login() {
     let username = loginForm.elements.namedItem("username").value;
     let password = loginForm.elements.namedItem("password").value;
-    const url = "/admin/login";
+    const url = "/login";
 
     const body = {
         username: username,
         password: password,
     };
-
-    debugger
 
     fetch(url, {
         method: "POST",
@@ -24,5 +22,6 @@ loginForm.addEventListener("submit", () => {
             window.location.href = "/admin"
         } else {
             alert("failed")
-        }});
-});
+        }
+    });
+};
