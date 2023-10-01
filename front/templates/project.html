@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Name}}</title>
-</head>
-<body>
-    {{template "header"}}
-    {{template "project".}}
-    {{template "static"}}
-</body>
-</html>
+{{template "header"}}
+{{define "project"}}
+<div class="card projectsCard">
+    <div class="card-body">
+        <h4 class="card-title">{{.Name}}</h4>
+        <p class="card-text">{{.Description}}</p>
+        <div class="text-center">
+            <a href="{{.Url}}" class="btn btn-success">Link</a>
+        </div>
+        <ul class="card-tagbox">
+            {{range .Tags}}
+            <li class="{{.TagType}}">{{.TagName}}</li>
+            {{end}}
+        </ul>
+    </div>
+</div>
+{{end}}
+{{template "footer"}}

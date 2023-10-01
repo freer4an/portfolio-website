@@ -1,0 +1,16 @@
+cookie:
+  admin: admin
+  maxage:
+  duration:
+app:
+  addr: 0.0.0.0:8000
+admin:
+  password: secret
+  login: ady
+db:
+  name: portfolio
+  uri: mongodb://localhost:27017
+  user: root
+  password: password
+  coll-projects: projects
+env: development
