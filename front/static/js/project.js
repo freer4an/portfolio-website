@@ -1,5 +1,4 @@
 const newProjectForm = document.getElementById('formProject');
-const updateProjectForm = document.getElementById('formUpdateProject');
 
 const POST = "POST"
 const GET = "GET"
@@ -47,9 +46,12 @@ function deleteProject(name) {
 }
 
 function submitProject(body, url, method) {
+    if (body != null) {
+        body = JSON.stringify(body)
+    }
     fetch(url, {
         method: method,
-        body: JSON.stringify(body),
+        body: body,
         headers: {
             "Content-Type": "application/json"
         }

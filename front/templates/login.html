@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/static/css/login.css">
+  <link rel="stylesheet" href="/static/css/admin.css">
 </head>
 <body>
   <h2>Login into Admin Panel</h2>
   <div class="login_form">
-    <form id="login-form">
+    <form id="login-form" onsubmit="event.preventDefault();">
         <label for="username"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="username" required>
         <label for="password"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="password" required>
+        <button type="submit" onclick="login()">Login</button>
     </form>
-    <button onclick="login()">Login</button>
   </div>
 <script src="/static/js/login.js"></script>
 </body>
