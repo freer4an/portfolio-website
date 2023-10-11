@@ -11,7 +11,7 @@ sudo docker compose up
 ```
 For now [projects](http://localhost:8000/projects) page is empty. So let's create projects.
 - Login into admin panel [http://localhost:8000/login](http://localhost:8000/login)
-- Get username and password from [config](config/config.yaml) file.
+- Get username and password from [config](configs/config.yaml) file.
 - Create projects
 // image
 - Comeback to [projects](http://localhost:8000/projects)
