@@ -30,11 +30,9 @@ input[type=password], select {
     box-sizing: border-box;
 }
 
-input[type=textarea], select {
+textarea {
     width: 100%;
-    padding: 50px 20px;
     margin: 8px 0;
-    display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -42,7 +40,7 @@ input[type=textarea], select {
 
 input[type=url] {
     width: 100%;
-    color: white;
+    color: black;
     padding: 10px 20px;
     margin: 8px 0;
     display: inline-block;
@@ -70,4 +68,20 @@ input[type=submit]:hover {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
+}
+
+#popup-update {
+    padding: 15px 50px 20px 50px;
+    position: fixed;
+    bottom: 0; 
+    left: 0;
+    width: 95%;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+}
+
+#old_name {
+    font-size: large;
+    font-weight: bold;
+    margin: 20px auto;
 }

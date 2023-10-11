@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"html/template"
 	"os"
 	"os/signal"
@@ -30,7 +31,8 @@ func run() error {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
-	ctx := context.Background()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	client, err := initMongoDB(ctx, config)
 	if err != nil {
@@ -76,10 +78,12 @@ func gracefullShotdown(ctx context.Context, client *mongo.Client, server *server
 }
 
 func initMongoDB(ctx context.Context, config *config.Config) (*mongo.Client, error) {
+	log.Info().Msg("pending of connection to " + config.Database.Uri)
 	client, err := mongodb.Connect(ctx, config.Database.Uri)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("hello")
 	if err := mongodb.MongoMigrate(client, config.Database.Name, config.Database.CollProject); err != nil {
 		return nil, err
 	}

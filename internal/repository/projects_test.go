@@ -18,13 +18,8 @@ func createRandomProject(t *testing.T) models.Project {
 	res, err := testStore.Project.Create(ctx, project)
 	require.NoError(t, err)
 
-	tags := randomTag(3)
-	err = testStore.Tag.AddToProject(ctx, project.Name, tags...)
-	require.NoError(t, err)
-
 	projectU, err := testStore.Project.GetByName(ctx, project.Name)
 	require.NoError(t, err)
-	require.Len(t, projectU.Tags, 3)
 	project.ID = res
 
 	return projectU

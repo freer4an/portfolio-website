@@ -53,11 +53,7 @@ func (api *ProjectAPI) GetProjectByName(w http.ResponseWriter, r *http.Request) 
 }
 
 func (api *ProjectAPI) UpdateProject(w http.ResponseWriter, r *http.Request) {
-	var req interface{}
-	if _, ok := req.(models.Project); !ok {
-		helpers.ErrResponse(w, fmt.Errorf("Type assertion error"), http.StatusBadRequest)
-		return
-	}
+	var req models.Project
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		helpers.ErrResponse(w, err, http.StatusBadRequest)
 		return

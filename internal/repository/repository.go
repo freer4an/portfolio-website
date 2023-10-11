@@ -4,7 +4,6 @@ import "go.mongodb.org/mongo-driver/mongo"
 
 type Repository struct {
 	Project ProjectI
-	Tag     TagI
 }
 
 func New(client *mongo.Client, dbName, coll_name string) *Repository {
@@ -13,6 +12,5 @@ func New(client *mongo.Client, dbName, coll_name string) *Repository {
 
 	return &Repository{
 		Project: NewProjectR(db, coll_Projects),
-		Tag:     NewTagsR(db, coll_Projects),
 	}
 }

@@ -9,23 +9,38 @@
 </head>
 <body>
     <div class="container" id="main">
-        <!-- <div class="update-container" id="popup-update" style="display: none;">
-            <h2>Update Project</h2>
-                <title></title>
-                
+        <div class="update-container" id="popup-update" style="display: none;">
+            <button id="close_popup" onclick="closeUpdateForm()">x</button>
+            <form id="form-updateproject" onsubmit="event.preventDefault()">
+                <legend></legend>
+                <label id="old_name"></label>
+                <br>
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name">
+                <label for="abstract">Abstract</label>
+                <input type="text" name="abstract" id="abstract">
+                <label for="description">Description</label>
+                <br>
+                <textarea name="description" rows="10" cols="80"></textarea>
+                <br>
+                <label for="link">Link</label>
+                <input type="Url" name="link" id="link">
                 <button onclick="updateProject()">Submit</button>
-        </div> -->
+            </form>
+        </div>
         <div class="add-project-container">
             <button class="add-project-btn" onclick="toggleVisibility()">+</button>
             <div id="containerFormProject" class="hidden" style="display: none;">
                 <h2>New Project</h2>
-                <form id="formProject" onsubmit="event.preventDefault();">
+                <form id="form-newproject" onsubmit="event.preventDefault();">
                     <label for="name">Name</label>
                     <input type="text" name="name" id="name" autocomplete="additional-name" required>
                     <label for="abstract">Abstract</label>
                     <input type="text" name="abstract" id="abstract">
                     <label for="description">Description</label>
-                    <input type="textarea" name="description" id="description">
+                    <br>
+                    <textarea name="description" id="description" rows="5" cols="80"></textarea>
+                    <br>
                     <label for="link">Link</label>
                     <input type="Url" name="link" id="link">
                     <button onclick="addProject()">Submit</button>
@@ -35,15 +50,10 @@
         <section class="projects">
             {{range .}}
             <div class="project-container" id="id-{{.Name}}">
-                <h4 class="project-name">{{.Name}}</h4>
-                <h6 class="project-abstract">{{.Abstract}}</h6>
+                <h3 class="project-name">{{.Name}}</h3>
+                <p class="project-abstract">{{.Abstract}}</p>
                 <p class="project-description">{{.Description}}</p>
                 <a href="{{.Url}}" class="project-link">Link</a>
-                <ul class="project-tagbox">
-                    {{range .Tags}}
-                    <li class="{{.TagType}}">{{.TagName}}</li>
-                    {{end}}
-                </ul>
                 <button onclick="openUpdateForm('{{.Name}}')">Change</button>
                 <button onclick="deleteProject('{{.Name}}')">Delete</button>
                 {{if .Finished}}
