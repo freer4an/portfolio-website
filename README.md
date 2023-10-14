@@ -20,12 +20,12 @@ Get username and password from ".env" you've created file.
 ### Create project
 Click [+] on admin panel <br />
 ![img](docs/images/create_project.png)
-- Result [projects](http://localhost:8000/projects) <br />
+Result [projects](http://localhost:8000/projects) <br />
 ![img](docs/images/client_result.png)
 
 ### Update project
 Click update button of the project you want to update <br />
 ![img](docs/images/update_project.png)
-- Result [projects](http://localhost:8000/projects) <br />
+Result [projects](http://localhost:8000/projects) <br />
 ![img](docs/images/client_result.png)
 
