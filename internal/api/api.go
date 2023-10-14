@@ -3,7 +3,6 @@ package api
 import (
 	"html/template"
 
-	"github.com/freer4an/portfolio-website/inits/config"
 	"github.com/freer4an/portfolio-website/internal/api/client"
 	"github.com/freer4an/portfolio-website/internal/api/project"
 	"github.com/freer4an/portfolio-website/internal/repository"
@@ -14,8 +13,8 @@ type API struct {
 	Project *project.ProjectAPI
 }
 
-func New(store *repository.Repository, temp *template.Template, config *config.Config) *API {
-	clientAPI := client.New(store, temp, config)
+func New(store *repository.Repository, temp *template.Template) *API {
+	clientAPI := client.New(store, temp)
 	projectAPI := project.New(store, temp)
 	return &API{
 		Client:  clientAPI,

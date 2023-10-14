@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/freer4an/portfolio-website/helpers"
 	"github.com/freer4an/portfolio-website/internal/repository"
@@ -25,7 +26,7 @@ func (api *ClientAPI) Login_action(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if req.Username != api.config.Admin.Login || req.Password != api.config.Admin.Password {
+	if req.Username != os.Getenv("login") || req.Password != os.Getenv("password") {
 		helpers.ErrResponse(w, fmt.Errorf("Failed to confirm data"), http.StatusUnauthorized)
 		return
 	}

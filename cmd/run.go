@@ -14,16 +14,21 @@ import (
 	"github.com/freer4an/portfolio-website/internal/api"
 	"github.com/freer4an/portfolio-website/internal/repository"
 	"github.com/freer4an/portfolio-website/server"
+	"github.com/joho/godotenv"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func run() error {
-	// get .yaml variables
+	// get .yaml variables and environment
 	config, err := config.InitConfig("./configs")
 	if err != nil {
 		return err
+	}
+
+	if err = godotenv.Load(); err != nil {
+		return fmt.Errorf("Error reading .env %v", err)
 	}
 
 	// logging mode
@@ -31,8 +36,7 @@ func run() error {
 		log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
+	ctx := context.TODO()
 
 	client, err := initMongoDB(ctx, config)
 	if err != nil {
@@ -43,7 +47,7 @@ func run() error {
 		config.Database.Name,
 		config.Database.CollProject)
 
-	api := api.New(store, temp, config)
+	api := api.New(store, temp)
 	server := server.New()
 	server.BuildRoutes("/projects", api.Project.Routes())
 	server.BuildRoutes("/", api.Client.Routes())
@@ -57,12 +61,12 @@ func run() error {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL, syscall.SIGTSTP)
 	<-sig
-	gracefullShotdown(ctx, client, server)
+	gracefullShutdown(client, server)
 	return nil
 }
 
-func gracefullShotdown(ctx context.Context, client *mongo.Client, server *server.Server) {
-	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+func gracefullShutdown(client *mongo.Client, server *server.Server) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	err := client.Disconnect(ctx)
@@ -78,12 +82,11 @@ func gracefullShotdown(ctx context.Context, client *mongo.Client, server *server
 }
 
 func initMongoDB(ctx context.Context, config *config.Config) (*mongo.Client, error) {
-	log.Info().Msg("pending of connection to " + config.Database.Uri)
 	client, err := mongodb.Connect(ctx, config.Database.Uri)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("hello")
+
 	if err := mongodb.MongoMigrate(client, config.Database.Name, config.Database.CollProject); err != nil {
 		return nil, err
 	}

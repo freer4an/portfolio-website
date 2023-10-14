@@ -7,28 +7,14 @@ import (
 )
 
 type Config struct {
-	Cookie   *Cookie   `mapstructure:"cookie"`
 	App      *App      `mapstructure:"app"`
-	Admin    *Admin    `mapstructure:"admin"`
 	Database *Database `mapstructure:"db"`
 	Env      string    `mapstructure:"env"`
-}
-
-type Cookie struct {
-	Admin    string `mapstructure:"admin"`
-	MaxAge   string `mapstructure:"maxage"`
-	Duration string `mapstructure:"duration"`
 }
 
 type App struct {
 	Addr     string `mapstructure:"addr"`
 	MaxAge   string `mapstructure:"maxage"`
-	Duration string `mapstructure:"duration"`
-}
-
-type Admin struct {
-	Login    string `mapstructure:"login"`
-	Password string `mapstructure:"password"`
 	Duration string `mapstructure:"duration"`
 }
 
@@ -42,6 +28,7 @@ type Database struct {
 
 func InitConfig(path string) (*Config, error) {
 	var config *Config
+
 	viper.AddConfigPath(path)
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")

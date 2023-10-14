@@ -11,17 +11,19 @@ import (
 
 // connect and get mongo client
 func Connect(ctx context.Context, uri string) (*mongo.Client, error) {
-	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
-	defer cancel()
 	if uri == "" {
 		return nil, fmt.Errorf("Empty mongodb uri")
 	}
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
+	opts := options.Client().ApplyURI(uri)
+	opts.SetServerSelectionTimeout(2 * time.Second)
+	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed connection to MongoDB: %v", err)
 	}
-	if err = client.Ping(ctx, nil); err != nil {
-		return nil, fmt.Errorf(": %v", err)
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		return nil, fmt.Errorf("Ping mongodb: %v", err)
 	}
 
 	return client, nil
