@@ -27,5 +27,5 @@ Result [projects](http://localhost:8000/projects) <br />
 Click update button of the project you want to update <br />
 ![img](docs/images/update_project.png)
 Result [projects](http://localhost:8000/projects) <br />
-![img](docs/images/client_result.png)
+![img](docs/images/update_result.png)
 
