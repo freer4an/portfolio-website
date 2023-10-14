@@ -4,6 +4,8 @@
 This is a portfolio website with an admin panel. From the admin panel you can manipulate projects and data of the author of the portfolio.
 
 ## Usage
+
+Create ".env" file and define "login" and "password" for admin in .env
 Make sure you have installed docker engine.
 
 ```console
@@ -13,6 +15,6 @@ For now [projects](http://localhost:8000/projects) page is empty. So let's creat
 - Login into admin panel [http://localhost:8000/login](http://localhost:8000/login)
 - Get username and password from [config](configs/config.yaml) file.
 - Create projects
-// image
+![img](docs/images/)
 - Comeback to [projects](http://localhost:8000/projects)
 // image
