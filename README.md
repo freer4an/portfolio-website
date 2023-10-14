@@ -1,10 +1,11 @@
 # portfolio-website
+The front was made minimalistic and crooked because it's a demo project)
+Feel free to modify the code.
 
 ## Description
 This is a portfolio website with an admin panel. From the admin panel you can manipulate projects and data of the author of the portfolio.
 
 ## Usage
-
 Create ".env" file and define "login" and "password" for admin in .env
 Make sure you have installed docker engine.
 
